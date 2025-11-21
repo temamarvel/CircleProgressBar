@@ -2,7 +2,7 @@ import SwiftUI
 
 public struct CircleProgressView: View {
     
-    let progress: Double
+    public let progress: Double
     private var normalizedProgress: Double {
         guard progress > 0 else { return 0 }
         if progress == 1.0 { return 1 }
