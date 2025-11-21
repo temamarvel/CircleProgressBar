@@ -26,12 +26,9 @@ public struct CircleProgressView: View {
                 .foregroundColor(Color(UIColor.systemGray3))
 
             if !isFirstLap {
-                withAnimation(){
                     Circle()
                         .stroke(style: StrokeStyle(lineWidth: 30))
                         .foregroundColor(Color(UIColor.systemGreen))
-
-                }
             }
 
             Circle()
@@ -67,4 +64,25 @@ public struct CircleProgressView: View {
         }
         .padding()
     }
+}
+
+/// Обёртка только для превью
+struct CircleProgressView3PreviewContainer: View {
+    @State private var progress: Double = 0.1   // 0...1 — цель, >1 — перевыполнение
+
+    var body: some View {
+        VStack(spacing: 24) {
+            CircleProgressView(progress: progress)
+
+            // Чтобы в превью можно было «крутить» значение
+            Slider(value: $progress, in: 0...3)
+                .padding(.horizontal)
+        }
+        .padding()
+        .background(Color.black)
+    }
+}
+
+#Preview("Calorie ring3 interactive") {
+    CircleProgressView3PreviewContainer()
 }
