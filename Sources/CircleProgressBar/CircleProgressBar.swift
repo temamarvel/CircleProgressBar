@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct CircleProgressView: View {
+public struct CircleProgressView: View {
     
     let progress: Double
     private var normalizedProgress: Double {
@@ -12,7 +12,7 @@ struct CircleProgressView: View {
         return progress <= 0.98
     }
     
-    var body: some View {
+    public var body: some View {
         ZStack {
             Circle()
                 .stroke(lineWidth: 30)
