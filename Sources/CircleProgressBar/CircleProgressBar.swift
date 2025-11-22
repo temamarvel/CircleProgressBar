@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 public struct CircleProgressView: View {
     
@@ -17,6 +18,20 @@ public struct CircleProgressView: View {
     private var isFirstLap: Bool {
         return progress <= 0.98
     }
+    private var barColor: Color {
+        // Цвет можно нормализовать в 0...1, даже если progress > 1
+        let t = max(0, min(progress, 1)) // только для цвета, длину дуги можно считать по-другому
+        
+        if t < 0.5 {
+            // 0...0.5 → 0...1 для перехода red → yellow
+            let localT = t / 0.5
+            return .interpolate(from: .red, to: .yellow, fraction: localT)
+        } else {
+            // 0.5...1 → 0...1 для перехода yellow → green
+            let localT = (t - 0.5) / 0.5
+            return .interpolate(from: .yellow, to: .green, fraction: localT)
+        }
+    }
     
     public var body: some View {
         ZStack {
@@ -28,13 +43,13 @@ public struct CircleProgressView: View {
             if !isFirstLap {
                     Circle()
                         .stroke(style: StrokeStyle(lineWidth: 30))
-                        .foregroundColor(Color(UIColor.systemGreen))
+                        .foregroundColor(barColor.lighter(by: 0.2))
             }
 
             Circle()
                 .trim(from: CGFloat(abs((min(normalizedProgress, 1.0))-0.001)), to: CGFloat(abs((min(normalizedProgress, 1.0))-0.0005)))
                 .stroke(style: StrokeStyle(lineWidth: 30, lineCap: .round, lineJoin: .round))
-                .foregroundColor(Color(UIColor.systemGreen))
+                .foregroundColor(barColor)
                 .shadow(color: .black, radius: 10, x: 0, y: 0)
                 .rotationEffect(.degrees(-90.0))
                 .clipShape(
@@ -48,11 +63,11 @@ public struct CircleProgressView: View {
             Circle()
                 .trim(from: 0.0, to: isFirstLap ? normalizedProgress : 0.25)
                 .stroke(style: StrokeStyle(
-                    lineWidth: 10,
+                    lineWidth: 30,
                     lineCap: .round,
                     lineJoin: .round))
                 .foregroundStyle(.angularGradient(
-                    colors: [.green, .red],
+                    colors: [barColor, barColor.lighter(by: 0.2)],
                     center: .center,
                     startAngle: .degrees(-10),
                     endAngle: .degrees(350)
@@ -82,6 +97,51 @@ struct CircleProgressView3PreviewContainer: View {
         .background(Color.black)
     }
 }
+
+extension Color {
+    func lighter(by amount: CGFloat = 0.2) -> Color {
+        let uiColor = UIColor(self)
+        var h: CGFloat = 0
+        var s: CGFloat = 0
+        var b: CGFloat = 0
+        var a: CGFloat = 0
+        
+        // переводим в HSB
+        guard uiColor.getHue(&h, saturation: &s, brightness: &b, alpha: &a) else {
+            return self // если не получилось — возвращаем исходный
+        }
+        
+        return Color(
+            hue: h,
+            saturation: s,
+            brightness: min(b + amount, 1.0),
+            opacity: a
+        )
+    }
+    
+    static func interpolate(from: Color, to: Color, fraction: CGFloat) -> Color {
+        let f = max(0, min(fraction, 1)) // clamp 0...1
+        
+        let fromUIColor = UIColor(from)
+        let toUIColor = UIColor(to)
+        
+        var fr: CGFloat = 0, fg: CGFloat = 0, fb: CGFloat = 0, fa: CGFloat = 0
+        var tr: CGFloat = 0, tg: CGFloat = 0, tb: CGFloat = 0, ta: CGFloat = 0
+        
+        guard fromUIColor.getRed(&fr, green: &fg, blue: &fb, alpha: &fa),
+              toUIColor.getRed(&tr, green: &tg, blue: &tb, alpha: &ta) else {
+            return from
+        }
+        
+        let r = fr + (tr - fr) * f
+        let g = fg + (tg - fg) * f
+        let b = fb + (tb - fb) * f
+        let a = fa + (ta - fa) * f
+        
+        return Color(red: r, green: g, blue: b, opacity: a)
+    }
+}
+
 
 #Preview("Calorie ring3 interactive") {
     CircleProgressView3PreviewContainer()
