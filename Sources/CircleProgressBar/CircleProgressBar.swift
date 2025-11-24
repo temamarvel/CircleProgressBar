@@ -68,11 +68,6 @@ public struct CircleProgressView: View {
                     Circle().stroke(lineWidth: 30)
                 )
             
-            VStack{
-                Text("\(progress)").foregroundColor(Color.green)
-                Text("\(normalizedProgress)").foregroundColor(Color.red)
-            }
-            
             Circle()
                 .trim(from: 0.0, to: isHalfLap ? normalizedProgress : 0.5)
                 .stroke(style: StrokeStyle(
