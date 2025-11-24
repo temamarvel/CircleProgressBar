@@ -16,7 +16,7 @@ public struct CircleProgressView: View {
         return progress.truncatingRemainder(dividingBy: 1)
     }
     private var isFirstLap: Bool {
-        return progress <= 0.98
+        return progress <= 0.975
     }
     private var barColor: Color {
         // Цвет можно нормализовать в 0...1, даже если progress > 1
@@ -43,18 +43,19 @@ public struct CircleProgressView: View {
             if !isFirstLap {
                     Circle()
                         .stroke(style: StrokeStyle(lineWidth: 30))
-                        .foregroundColor(barColor.lighter(by: 0.2))
+                        .foregroundColor(barColor)
             }
 
-            Circle()
-                .trim(from: CGFloat(abs((min(normalizedProgress, 1.0))-0.001)), to: CGFloat(abs((min(normalizedProgress, 1.0))-0.0005)))
-                .stroke(style: StrokeStyle(lineWidth: 30, lineCap: .round, lineJoin: .round))
-                .foregroundColor(barColor)
-                .shadow(color: .black, radius: 10, x: 0, y: 0)
-                .rotationEffect(.degrees(-90.0))
-                .clipShape(
-                    Circle().stroke(lineWidth: 30)
-                )
+//            Circle()
+//                .trim(from: CGFloat(abs((min(normalizedProgress, 1.0))-0.001)), to: CGFloat(abs((min(normalizedProgress, 1.0))-0.0005)))
+//                .stroke(style: StrokeStyle(lineWidth: 30, lineCap: .round, lineJoin: .round))
+//                //.foregroundColor(barColor.lighter(by: 0.2))
+//                .foregroundColor(.blue)
+//                .shadow(color: .black, radius: 10, x: 0, y: 0)
+//                .rotationEffect(.degrees(-90.0))
+//                .clipShape(
+//                    Circle().stroke(lineWidth: 30)
+//                )
             VStack{
                 Text("\(progress)").foregroundColor(Color.green)
                 Text("\(normalizedProgress)").foregroundColor(Color.red)
@@ -69,8 +70,8 @@ public struct CircleProgressView: View {
                 .foregroundStyle(.angularGradient(
                     colors: [barColor, barColor.lighter(by: 0.2)],
                     center: .center,
-                    startAngle: .degrees(-10),
-                    endAngle: .degrees(350)
+                    startAngle: .degrees(-5),
+                    endAngle: .degrees(355)
                 ))
                 .rotationEffect(.degrees(isFirstLap ? -90.0 : -180.0+normalizedProgress*360))
 
