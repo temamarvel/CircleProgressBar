@@ -18,6 +18,11 @@ public struct CircleProgressView: View {
     private var isFirstLap: Bool {
         return progress <= 0.975
     }
+    
+    private var isHalfLap: Bool {
+        return progress <= 0.5
+    }
+    
     private var barColor: Color {
         // Цвет можно нормализовать в 0...1, даже если progress > 1
         let t = max(0, min(progress, 1)) // только для цвета, длину дуги можно считать по-другому
@@ -61,8 +66,19 @@ public struct CircleProgressView: View {
                 Text("\(normalizedProgress)").foregroundColor(Color.red)
             }
             
+            if !isHalfLap {
+                Circle()
+                    .trim(from: 0.0, to: normalizedProgress)
+                    .stroke(style: StrokeStyle(
+                        lineWidth: 30,
+                        lineCap: .round,
+                        lineJoin: .round))
+                    .foregroundStyle(barColor)
+                    .rotationEffect(.degrees(-90.0))
+            }
+            
             Circle()
-                .trim(from: 0.0, to: isFirstLap ? normalizedProgress : 0.25)
+                .trim(from: 0.0, to: isHalfLap ? normalizedProgress : 0.5)
                 .stroke(style: StrokeStyle(
                     lineWidth: 30,
                     lineCap: .round,
@@ -73,7 +89,7 @@ public struct CircleProgressView: View {
                     startAngle: .degrees(-5),
                     endAngle: .degrees(355)
                 ))
-                .rotationEffect(.degrees(isFirstLap ? -90.0 : -180.0+normalizedProgress*360))
+                .rotationEffect(.degrees(isHalfLap ? -90.0 : -270.0+normalizedProgress*360))
 
 
             
