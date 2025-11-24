@@ -9,14 +9,13 @@ public struct CircleProgressView: View {
         self.progress = progress
     }
 
-    
     private var normalizedProgress: Double {
         guard progress > 0 else { return 0 }
         if progress == 1.0 { return 1 }
         return progress.truncatingRemainder(dividingBy: 1)
     }
     private var isFirstLap: Bool {
-        return progress <= 0.975
+        return progress <= 1.0
     }
     
     private var isHalfLap: Bool {
@@ -24,17 +23,14 @@ public struct CircleProgressView: View {
     }
     
     private var barColor: Color {
-        // Цвет можно нормализовать в 0...1, даже если progress > 1
-        let t = max(0, min(progress, 1)) // только для цвета, длину дуги можно считать по-другому
+        let t = max(0, min(progress, 1))
         
         if t < 0.5 {
-            // 0...0.5 → 0...1 для перехода red → yellow
-            let localT = t / 0.5
-            return .interpolate(from: .red, to: .yellow, fraction: localT)
+            let fraction = t / 0.5
+            return .interpolate(from: .red, to: .yellow, fraction: fraction)
         } else {
-            // 0.5...1 → 0...1 для перехода yellow → green
-            let localT = (t - 0.5) / 0.5
-            return .interpolate(from: .yellow, to: .green, fraction: localT)
+            let fraction = (t - 0.5) / 0.5
+            return .interpolate(from: .yellow, to: .green, fraction: fraction)
         }
     }
     
@@ -50,21 +46,6 @@ public struct CircleProgressView: View {
                         .stroke(style: StrokeStyle(lineWidth: 30))
                         .foregroundColor(barColor)
             }
-
-//            Circle()
-//                .trim(from: CGFloat(abs((min(normalizedProgress, 1.0))-0.001)), to: CGFloat(abs((min(normalizedProgress, 1.0))-0.0005)))
-//                .stroke(style: StrokeStyle(lineWidth: 30, lineCap: .round, lineJoin: .round))
-//                //.foregroundColor(barColor.lighter(by: 0.2))
-//                .foregroundColor(.blue)
-//                .shadow(color: .black, radius: 10, x: 0, y: 0)
-//                .rotationEffect(.degrees(-90.0))
-//                .clipShape(
-//                    Circle().stroke(lineWidth: 30)
-//                )
-            VStack{
-                Text("\(progress)").foregroundColor(Color.green)
-                Text("\(normalizedProgress)").foregroundColor(Color.red)
-            }
             
             if !isHalfLap {
                 Circle()
@@ -75,6 +56,21 @@ public struct CircleProgressView: View {
                         lineJoin: .round))
                     .foregroundStyle(barColor)
                     .rotationEffect(.degrees(-90.0))
+            }
+
+            Circle()
+                .trim(from: CGFloat(abs((min(normalizedProgress, 1.0))-0.001)), to: CGFloat(abs((min(normalizedProgress, 1.0))-0.0005)))
+                .stroke(style: StrokeStyle(lineWidth: 30, lineCap: .round, lineJoin: .round))
+                .foregroundColor(barColor)
+                .shadow(color: .black, radius: 10, x: 0, y: 0)
+                .rotationEffect(.degrees(-90.0))
+                .clipShape(
+                    Circle().stroke(lineWidth: 30)
+                )
+            
+            VStack{
+                Text("\(progress)").foregroundColor(Color.green)
+                Text("\(normalizedProgress)").foregroundColor(Color.red)
             }
             
             Circle()
@@ -90,23 +86,18 @@ public struct CircleProgressView: View {
                     endAngle: .degrees(355)
                 ))
                 .rotationEffect(.degrees(isHalfLap ? -90.0 : -270.0+normalizedProgress*360))
-
-
-            
         }
         .padding()
     }
 }
 
-/// Обёртка только для превью
-struct CircleProgressView3PreviewContainer: View {
-    @State private var progress: Double = 0.1   // 0...1 — цель, >1 — перевыполнение
+struct CircleProgressViewPreviewContainer: View {
+    @State private var progress: Double = 0.1
 
     var body: some View {
         VStack(spacing: 24) {
             CircleProgressView(progress: progress)
 
-            // Чтобы в превью можно было «крутить» значение
             Slider(value: $progress, in: 0...3)
                 .padding(.horizontal)
         }
@@ -123,9 +114,8 @@ extension Color {
         var b: CGFloat = 0
         var a: CGFloat = 0
         
-        // переводим в HSB
         guard uiColor.getHue(&h, saturation: &s, brightness: &b, alpha: &a) else {
-            return self // если не получилось — возвращаем исходный
+            return self
         }
         
         return Color(
@@ -137,7 +127,7 @@ extension Color {
     }
     
     static func interpolate(from: Color, to: Color, fraction: CGFloat) -> Color {
-        let f = max(0, min(fraction, 1)) // clamp 0...1
+        let f = max(0, min(fraction, 1))
         
         let fromUIColor = UIColor(from)
         let toUIColor = UIColor(to)
@@ -160,6 +150,6 @@ extension Color {
 }
 
 
-#Preview("Calorie ring3 interactive") {
-    CircleProgressView3PreviewContainer()
+#Preview {
+    CircleProgressViewPreviewContainer()
 }
