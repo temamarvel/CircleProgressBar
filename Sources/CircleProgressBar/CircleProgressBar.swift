@@ -3,10 +3,16 @@ import UIKit
 
 public struct CircleProgressView: View {
     
-    let progress: Double
     
-    public init(progress: Double) {
+    let progress: Double
+    let gradientColors: [Color]
+    
+    public init(
+        progress: Double,
+        gradientColors: [Color] = [.red, .yellow, .green]
+    ) {
         self.progress = progress
+        self.gradientColors = gradientColors
     }
 
     private var normalizedProgress: Double {
@@ -24,14 +30,30 @@ public struct CircleProgressView: View {
     
     private var barColor: Color {
         let t = max(0, min(progress, 1))
-        
-        if t < 0.5 {
-            let fraction = t / 0.5
-            return .interpolate(from: .red, to: .yellow, fraction: fraction)
-        } else {
-            let fraction = (t - 0.5) / 0.5
-            return .interpolate(from: .yellow, to: .green, fraction: fraction)
+
+        guard !gradientColors.isEmpty else {
+            return .green
         }
+        
+        if gradientColors.count == 1 {
+            return gradientColors[0]
+        }
+
+        let segmentCount = gradientColors.count - 1
+
+        let scaled = t * Double(segmentCount)
+
+        let rawLowerIndex = Int(floor(scaled))
+        let lowerIndex = max(0, min(rawLowerIndex, segmentCount - 1))
+
+        let upperIndex = lowerIndex + 1
+
+        let localT = CGFloat(scaled - Double(lowerIndex))
+
+        let fromColor = gradientColors[lowerIndex]
+        let toColor = gradientColors[upperIndex]
+
+        return .interpolate(from: fromColor, to: toColor, fraction: localT)
     }
     
     public var body: some View {
