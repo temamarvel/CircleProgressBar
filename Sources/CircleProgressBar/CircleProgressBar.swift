@@ -113,7 +113,7 @@ struct CircleProgressViewPreviewContainer: View {
 
     var body: some View {
         VStack(spacing: 24) {
-            CircleProgressView(progress: progress)
+            CircleProgressView(progress: progress, gradientColors: Color.surfProgressGradient)
 
             Slider(value: $progress, in: 0...3)
                 .padding(.horizontal)
@@ -124,6 +124,37 @@ struct CircleProgressViewPreviewContainer: View {
 }
 
 extension Color {
+    
+    init(hex: String) {
+        let scanner = Scanner(string: hex)
+        _ = scanner.scanString("#")
+
+        var rgb: UInt64 = 0
+        scanner.scanHexInt64(&rgb)
+
+        let red = Double((rgb >> 16) & 0xFF) / 255.0
+        let green = Double((rgb >> 8) & 0xFF) / 255.0
+        let blue = Double(rgb & 0xFF) / 255.0
+
+        self.init(red: red, green: green, blue: blue)
+    }
+    
+    // отдельные цвета (удобно переиспользовать)
+    static let surfCoral   = Color(hex: "#E86A5B")
+    static let surfOrange  = Color(hex: "#FF7E3E")
+    static let surfSand    = Color(hex: "#F4D27A")
+    static let surfPalm    = Color(hex: "#6DAA6E")
+    static let surfPacific = Color(hex: "#1C9CA6")
+    
+    // сам градиент (массив цветов)
+    static let surfProgressGradient: [Color] = [
+        .surfCoral,
+        .surfOrange,
+        .surfSand,
+        .surfPalm,
+        .surfPacific
+    ]
+    
     func lighter(by amount: CGFloat = 0.2) -> Color {
         let uiColor = UIColor(self)
         var h: CGFloat = 0
