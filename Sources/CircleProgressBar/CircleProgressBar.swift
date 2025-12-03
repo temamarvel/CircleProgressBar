@@ -6,13 +6,16 @@ public struct CircleProgressView: View {
     
     let progress: Double
     let gradientColors: [Color]
+    let enableGlow: Bool
     
     public init(
         progress: Double,
-        gradientColors: [Color] = [.red, .yellow, .green]
+        gradientColors: [Color] = [.red, .yellow, .green],
+        enableGlow: Bool = false
     ) {
         self.progress = progress
         self.gradientColors = gradientColors
+        self.enableGlow = enableGlow
     }
 
     private var normalizedProgress: Double {
@@ -58,6 +61,16 @@ public struct CircleProgressView: View {
     
     public var body: some View {
         ZStack {
+            if enableGlow {
+                Circle()
+                    .trim(from: 0.0, to: 1.0)
+                    .stroke(style: StrokeStyle(lineWidth: 36, lineCap: .round)) // толще
+                    .foregroundColor(barColor)
+                    .blur(radius: 60)
+                    .opacity(0.7)
+                    .blendMode(.screen)
+            }
+            
             Circle()
                 .stroke(lineWidth: 30)
                 .opacity(0.3)
