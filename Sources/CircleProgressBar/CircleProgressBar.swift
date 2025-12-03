@@ -83,7 +83,7 @@ public struct CircleProgressView: View {
             Circle()
                 .trim(from: CGFloat(abs((min(normalizedProgress, 1.0))-0.001)), to: CGFloat(abs((min(normalizedProgress, 1.0))-0.0005)))
                 .stroke(style: StrokeStyle(lineWidth: 30, lineCap: .round, lineJoin: .round))
-                .foregroundColor(barColor)
+                .foregroundColor(barColor.lighter(by: 0.2))
                 .shadow(color: .black, radius: 10, x: 0, y: 0)
                 .rotationEffect(.degrees(-90.0))
                 .clipShape(
@@ -99,8 +99,8 @@ public struct CircleProgressView: View {
                 .foregroundStyle(.angularGradient(
                     colors: [barColor, barColor.lighter(by: 0.2)],
                     center: .center,
-                    startAngle: .degrees(-5),
-                    endAngle: .degrees(355)
+                    startAngle: .degrees(0),
+                    endAngle: .degrees(180)
                 ))
                 .rotationEffect(.degrees(isHalfLap ? -90.0 : -270.0+normalizedProgress*360))
         }
@@ -109,13 +109,24 @@ public struct CircleProgressView: View {
 }
 
 struct CircleProgressViewPreviewContainer: View {
-    @State private var progress: Double = 0.1
+    @State private var progress: Double = 0.7
+    @State private var padding: Double = 80.0
 
     var body: some View {
         VStack(spacing: 24) {
             CircleProgressView(progress: progress, gradientColors: Color.surfProgressGradient)
+                .padding(padding)
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(.ultraThinMaterial)
+                )
 
             Slider(value: $progress, in: 0...3)
+                .padding(.horizontal)
+            
+            Divider().frame(height: 5).overlay(.gray).clipShape(.capsule)
+            
+            Slider(value: $padding, in: 0...80)
                 .padding(.horizontal)
         }
         .padding()
