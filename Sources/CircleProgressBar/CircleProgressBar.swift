@@ -64,9 +64,9 @@ public struct CircleProgressView: View {
             if enableGlow {
                 Circle()
                     .trim(from: 0.0, to: 1.0)
-                    .stroke(style: StrokeStyle(lineWidth: 36, lineCap: .round)) // толще
+                    .stroke(style: StrokeStyle(lineWidth: 32, lineCap: .round)) // толще
                     .foregroundColor(barColor)
-                    .blur(radius: 60)
+                    .blur(radius: 10)
                     .opacity(0.7)
                     .blendMode(.screen)
             }
@@ -124,10 +124,11 @@ public struct CircleProgressView: View {
 struct CircleProgressViewPreviewContainer: View {
     @State private var progress: Double = 0.7
     @State private var padding: Double = 80.0
+    @State private var showGlow: Bool = false
 
     var body: some View {
         VStack(spacing: 24) {
-            CircleProgressView(progress: progress, gradientColors: Color.surfProgressGradient)
+            CircleProgressView(progress: progress, gradientColors: Color.surfProgressGradient, enableGlow: showGlow)
                 .padding(padding)
                 .background(
                     RoundedRectangle(cornerRadius: 20)
@@ -141,6 +142,10 @@ struct CircleProgressViewPreviewContainer: View {
             
             Slider(value: $padding, in: 0...80)
                 .padding(.horizontal)
+            
+            Divider().frame(height: 5).overlay(.gray).clipShape(.capsule)
+            
+            Toggle("Show glow", isOn: $showGlow).foregroundStyle(.green)
         }
         .padding()
         .background(Color.black)
