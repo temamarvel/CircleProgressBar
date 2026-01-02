@@ -127,10 +127,11 @@ struct CircleProgressViewPreviewContainer: View {
     @State private var progress: Double = 0.7
     @State private var padding: Double = 80.0
     @State private var showGlow: Bool = false
+    @State private var lighterTailColor: Bool = true
 
     var body: some View {
         VStack(spacing: 24) {
-            CircleProgressView(progress: progress, gradientColors: Color.surfProgressGradient, enableGlow: showGlow)
+            CircleProgressView(progress: progress, gradientColors: Color.surfProgressGradient, enableGlow: showGlow, enableLighterTailColor: lighterTailColor)
                 .padding(padding)
                 .background(
                     RoundedRectangle(cornerRadius: 20)
@@ -148,6 +149,10 @@ struct CircleProgressViewPreviewContainer: View {
             Divider().frame(height: 5).overlay(.gray).clipShape(.capsule)
             
             Toggle("Show glow", isOn: $showGlow).foregroundStyle(.green)
+            
+            Divider().frame(height: 5).overlay(.gray).clipShape(.capsule)
+            
+            Toggle("Lighter tail color", isOn: $lighterTailColor).foregroundStyle(.green)
         }
         .padding()
         .background(Color.black)
