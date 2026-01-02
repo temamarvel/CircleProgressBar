@@ -3,19 +3,21 @@ import UIKit
 
 public struct CircleProgressView: View {
     
-    
     let progress: Double
     let gradientColors: [Color]
     let enableGlow: Bool
+    let enableLighterTailColor: Bool
     
     public init(
         progress: Double,
         gradientColors: [Color] = [.red, .yellow, .green],
-        enableGlow: Bool = false
+        enableGlow: Bool = false,
+        enableLighterTailColor: Bool = false
     ) {
         self.progress = progress
         self.gradientColors = gradientColors
         self.enableGlow = enableGlow
+        self.enableLighterTailColor = enableLighterTailColor
     }
 
     private var normalizedProgress: Double {
@@ -96,7 +98,7 @@ public struct CircleProgressView: View {
             Circle()
                 .trim(from: CGFloat(abs((min(normalizedProgress, 1.0))-0.001)), to: CGFloat(abs((min(normalizedProgress, 1.0))-0.0005)))
                 .stroke(style: StrokeStyle(lineWidth: 30, lineCap: .round, lineJoin: .round))
-                .foregroundColor(barColor.lighter(by: 0.2))
+                .foregroundColor(enableLighterTailColor ? barColor.lighter(by: 0.2) : barColor)
                 .shadow(color: .black, radius: 10, x: 0, y: 0)
                 .rotationEffect(.degrees(-90.0))
                 .clipShape(
@@ -109,12 +111,12 @@ public struct CircleProgressView: View {
                     lineWidth: 30,
                     lineCap: .round,
                     lineJoin: .round))
-                .foregroundStyle(.angularGradient(
+                .foregroundStyle(enableLighterTailColor ? AnyShapeStyle(.angularGradient(
                     colors: [barColor, barColor.lighter(by: 0.2)],
                     center: .center,
                     startAngle: .degrees(0),
                     endAngle: .degrees(180)
-                ))
+                )) :  AnyShapeStyle(barColor))
                 .rotationEffect(.degrees(isHalfLap ? -90.0 : -270.0+normalizedProgress*360))
         }
         .padding()
@@ -151,81 +153,6 @@ struct CircleProgressViewPreviewContainer: View {
         .background(Color.black)
     }
 }
-
-extension Color {
-    
-    init(hex: String) {
-        let scanner = Scanner(string: hex)
-        _ = scanner.scanString("#")
-
-        var rgb: UInt64 = 0
-        scanner.scanHexInt64(&rgb)
-
-        let red = Double((rgb >> 16) & 0xFF) / 255.0
-        let green = Double((rgb >> 8) & 0xFF) / 255.0
-        let blue = Double(rgb & 0xFF) / 255.0
-
-        self.init(red: red, green: green, blue: blue)
-    }
-    
-    // отдельные цвета (удобно переиспользовать)
-    static let surfCoral   = Color(hex: "#E86A5B")
-    static let surfOrange  = Color(hex: "#FF7E3E")
-    static let surfSand    = Color(hex: "#F4D27A")
-    static let surfPalm    = Color(hex: "#6DAA6E")
-    static let surfPacific = Color(hex: "#1C9CA6")
-    
-    // сам градиент (массив цветов)
-    static let surfProgressGradient: [Color] = [
-        .surfCoral,
-        .surfOrange,
-        .surfSand,
-        .surfPalm,
-        .surfPacific
-    ]
-    
-    func lighter(by amount: CGFloat = 0.2) -> Color {
-        let uiColor = UIColor(self)
-        var h: CGFloat = 0
-        var s: CGFloat = 0
-        var b: CGFloat = 0
-        var a: CGFloat = 0
-        
-        guard uiColor.getHue(&h, saturation: &s, brightness: &b, alpha: &a) else {
-            return self
-        }
-        
-        return Color(
-            hue: h,
-            saturation: s,
-            brightness: min(b + amount, 1.0),
-            opacity: a
-        )
-    }
-    
-    static func interpolate(from: Color, to: Color, fraction: CGFloat) -> Color {
-        let f = max(0, min(fraction, 1))
-        
-        let fromUIColor = UIColor(from)
-        let toUIColor = UIColor(to)
-        
-        var fr: CGFloat = 0, fg: CGFloat = 0, fb: CGFloat = 0, fa: CGFloat = 0
-        var tr: CGFloat = 0, tg: CGFloat = 0, tb: CGFloat = 0, ta: CGFloat = 0
-        
-        guard fromUIColor.getRed(&fr, green: &fg, blue: &fb, alpha: &fa),
-              toUIColor.getRed(&tr, green: &tg, blue: &tb, alpha: &ta) else {
-            return from
-        }
-        
-        let r = fr + (tr - fr) * f
-        let g = fg + (tg - fg) * f
-        let b = fb + (tb - fb) * f
-        let a = fa + (ta - fa) * f
-        
-        return Color(red: r, green: g, blue: b, opacity: a)
-    }
-}
-
 
 #Preview {
     CircleProgressViewPreviewContainer()
