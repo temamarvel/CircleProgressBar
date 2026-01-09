@@ -24,8 +24,8 @@ public struct CircleProgressView: View {
                     AngularGradient(
                         colors: colors,
                         center: .center,
-                        startAngle: .degrees(-90),
-                        endAngle: .degrees(270)
+                        startAngle: .degrees(0),
+                        endAngle: .degrees(progress * 360)
                     )
                 )
         }
@@ -49,6 +49,7 @@ public struct CircleProgressView: View {
         guard progress > 0 else { return 0 }
         if progress == 1.0 { return 1 }
         return progress.truncatingRemainder(dividingBy: 1)
+        //return progress
     }
     private var isFirstLap: Bool {
         return progress <= 1.0
@@ -103,11 +104,11 @@ public struct CircleProgressView: View {
                 .opacity(0.3)
                 .foregroundColor(Color(UIColor.systemGray3))
 
-//            if !isFirstLap {
-//                    Circle()
-//                        .stroke(style: StrokeStyle(lineWidth: 30))
-//                        .foregroundStyle(barStyle)
-//            }
+            if !isFirstLap {
+                    Circle()
+                        .stroke(style: StrokeStyle(lineWidth: 30))
+                        .foregroundStyle(barStyle)
+            }
             
 //            if !isHalfLap {
 //                Circle()
@@ -120,16 +121,16 @@ public struct CircleProgressView: View {
 //                    .rotationEffect(.degrees(-90.0))
 //            }
 
-//            Circle()
-//                .trim(from: CGFloat(abs((min(normalizedProgress, 1.0))-0.001)), to: CGFloat(abs((min(normalizedProgress, 1.0))-0.0005)))
-//                .stroke(style: StrokeStyle(lineWidth: 30, lineCap: .round, lineJoin: .round))
-////                .foregroundColor(enableLighterTailColor ? barColor.lighter(by: 0.2) : barColor)
-//                .foregroundStyle(barStyle)
-//                .shadow(color: .black, radius: 10, x: 0, y: 0)
-//                .rotationEffect(.degrees(-90.0))
-//                .clipShape(
-//                    Circle().stroke(lineWidth: 30)
-//                )
+            Circle()
+                .trim(from: CGFloat(abs((min(normalizedProgress, 1.0))-0.001)), to: CGFloat(abs((min(normalizedProgress, 1.0))-0.0005)))
+                .stroke(style: StrokeStyle(lineWidth: 30, lineCap: .round, lineJoin: .round))
+//                .foregroundColor(enableLighterTailColor ? barColor.lighter(by: 0.2) : barColor)
+                .foregroundStyle(barStyle)
+                .shadow(color: .black, radius: 10, x: 0, y: 0)
+                .rotationEffect(.degrees(-90.0))
+                .clipShape(
+                    Circle().stroke(lineWidth: 30)
+                )
             
 //            Circle()
 //                .trim(from: 0.0, to: isHalfLap ? normalizedProgress : 0.5)
