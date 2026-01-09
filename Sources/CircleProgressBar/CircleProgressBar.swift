@@ -52,7 +52,7 @@ public struct CircleProgressView: View {
         //return progress
     }
     private var isFirstLap: Bool {
-        return progress <= 1.0
+        return progress <= 0.9
     }
     
     private var isHalfLap: Bool {
@@ -108,6 +108,7 @@ public struct CircleProgressView: View {
                     Circle()
                         .stroke(style: StrokeStyle(lineWidth: 30))
                         .foregroundStyle(barStyle)
+                        .rotationEffect(.degrees(-90.0))
             }
             
 //            if !isHalfLap {
@@ -147,16 +148,16 @@ public struct CircleProgressView: View {
 //                .foregroundStyle(barStyle)
 //                .rotationEffect(.degrees(isHalfLap ? -90.0 : -270.0+normalizedProgress*360))
             
-            Circle()
-                .trim(from: 0.0, to: normalizedProgress)
-                .stroke(style: StrokeStyle(
-                    lineWidth: 30,
-                    lineCap: .round,
-                    lineJoin: .round))
-            
-                .foregroundStyle(barStyle)
-                .rotationEffect(.degrees(-90.0))
-                //.rotationEffect(.degrees(isHalfLap ? -90.0 : -270.0+normalizedProgress*360))
+//            Circle()
+//                .trim(from: isFirstLap ? 0.0 : 0.1, to: normalizedProgress)
+//                .stroke(style: StrokeStyle(
+//                    lineWidth: 30,
+//                    lineCap: .round,
+//                    lineJoin: .round))
+//            
+//                .foregroundStyle(barStyle)
+//                .rotationEffect(.degrees(-90.0))
+//                //.rotationEffect(.degrees(isHalfLap ? -90.0 : -270.0+normalizedProgress*360))
         }
         .padding()
     }
