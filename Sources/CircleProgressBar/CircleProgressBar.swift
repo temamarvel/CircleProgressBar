@@ -52,7 +52,7 @@ public struct CircleProgressView: View {
         //return progress
     }
     private var isFirstLap: Bool {
-        return progress <= 0.9
+        return progress <= 1.0
     }
     
     private var isHalfLap: Bool {
@@ -111,16 +111,16 @@ public struct CircleProgressView: View {
                         .rotationEffect(.degrees(-90.0))
             }
             
-//            if !isHalfLap {
-//                Circle()
-//                    .trim(from: 0.0, to: normalizedProgress)
-//                    .stroke(style: StrokeStyle(
-//                        lineWidth: 30,
-//                        lineCap: .round,
-//                        lineJoin: .round))
-//                    .foregroundStyle(barStyle)
-//                    .rotationEffect(.degrees(-90.0))
-//            }
+            if !isHalfLap {
+                Circle()
+                    .trim(from: 0.0, to: normalizedProgress)
+                    .stroke(style: StrokeStyle(
+                        lineWidth: 30,
+                        lineCap: .round,
+                        lineJoin: .round))
+                    .foregroundStyle(barStyle)
+                    .rotationEffect(.degrees(-90.0))
+            }
 
             Circle()
                 .trim(from: CGFloat(abs((min(normalizedProgress, 1.0))-0.001)), to: CGFloat(abs((min(normalizedProgress, 1.0))-0.0005)))
@@ -133,20 +133,26 @@ public struct CircleProgressView: View {
                     Circle().stroke(lineWidth: 30)
                 )
             
-//            Circle()
-//                .trim(from: 0.0, to: isHalfLap ? normalizedProgress : 0.5)
-//                .stroke(style: StrokeStyle(
-//                    lineWidth: 30,
-//                    lineCap: .round,
-//                    lineJoin: .round))
-////                .foregroundStyle(enableLighterTailColor ? AnyShapeStyle(.angularGradient(
-////                    colors: [barColor, barColor.lighter(by: 0.2)],
-////                    center: .center,
-////                    startAngle: .degrees(0),
-////                    endAngle: .degrees(180)
-////                )) :  AnyShapeStyle(barColor))
-//                .foregroundStyle(barStyle)
-//                .rotationEffect(.degrees(isHalfLap ? -90.0 : -270.0+normalizedProgress*360))
+            Circle()
+                
+                //.trim(from: 0.0, to: isHalfLap ? normalizedProgress : 0.5)
+                .trim(from: 0.1, to: normalizedProgress)
+                
+                .stroke(style: StrokeStyle(
+                    lineWidth: 30,
+                    lineCap: .round,
+                    lineJoin: .round))
+//                .foregroundStyle(enableLighterTailColor ? AnyShapeStyle(.angularGradient(
+//                    colors: [barColor, barColor.lighter(by: 0.2)],
+//                    center: .center,
+//                    startAngle: .degrees(0),
+//                    endAngle: .degrees(180)
+//                )) :  AnyShapeStyle(barColor))
+                
+                .foregroundStyle(barStyle)
+                //.rotationEffect(.degrees(isHalfLap ? -90.0 : -270.0+normalizedProgress*360))
+                .rotationEffect(.degrees(isHalfLap ? -90.0 : -90.0))
+                //.rotationEffect(.degrees(-90.0))
             
 //            Circle()
 //                .trim(from: isFirstLap ? 0.0 : 0.1, to: normalizedProgress)
