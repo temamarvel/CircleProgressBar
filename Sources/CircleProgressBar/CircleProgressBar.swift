@@ -24,8 +24,8 @@ public struct CircleProgressView: View {
                     AngularGradient(
                         colors: colors,
                         center: .center,
-                        startAngle: .degrees(0),
-                        endAngle: .degrees(progress*360)
+                        startAngle: .degrees(0 - rotationDegrees),
+                        endAngle: .degrees(progress*360 - rotationDegrees)
                     )
                 )
         }
@@ -63,6 +63,10 @@ public struct CircleProgressView: View {
         return progress <= 0.5
     }
     
+    private var rotationDegrees: Double {
+        return is075Lap ? 0.0 : (normalizedProgress - 0.75)*360.0
+    }
+    
 //    private var barColor: Color {
 //        let t = max(0, min(progress, 1))
 //
@@ -93,6 +97,9 @@ public struct CircleProgressView: View {
     
     public var body: some View {
         ZStack {
+            
+            Text("\(progress)")
+            
 //            if enableGlow {
 //                Circle()
 //                    .trim(from: 0.0, to: 1.0)
@@ -155,9 +162,9 @@ public struct CircleProgressView: View {
                 
                 .foregroundStyle(barStyle)
                 //.rotationEffect(.degrees(is09Lap ? 0.0 : 90.0))
-                .rotationEffect(.degrees(is075Lap ? 0.0 : (normalizedProgress - 0.75)*360.0))
+                //.rotationEffect(.degrees(is075Lap ? 0.0 : (normalizedProgress - 0.75)*360.0))
                 //.rotationEffect(.degrees(isHalfLap ? -90.0 : -90.0))
-                //.rotationEffect(.degrees(-90.0))
+                .rotationEffect(.degrees(rotationDegrees))
             
 //            Circle()
 //                .trim(from: isFirstLap ? 0.0 : 0.1, to: normalizedProgress)
@@ -175,8 +182,8 @@ public struct CircleProgressView: View {
 }
 
 struct CircleProgressViewPreviewContainer: View {
-    @State private var progress: Double = 0.7
-    @State private var padding: Double = 80.0
+    @State private var progress: Double = 1.0
+    @State private var padding: Double = 30.0
     @State private var showGlow: Bool = false
     @State private var lighterTailColor: Bool = true
 
