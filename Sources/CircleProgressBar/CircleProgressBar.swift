@@ -24,8 +24,8 @@ public struct CircleProgressView: View {
                     AngularGradient(
                         colors: colors,
                         center: .center,
-                        startAngle: .degrees(0 - rotationDegrees),
-                        endAngle: .degrees(progress*360 - rotationDegrees)
+                        startAngle: .degrees(-rotationDegrees),
+                        endAngle: .degrees(progress*370 - rotationDegrees)
                     )
                 )
         }
