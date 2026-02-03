@@ -159,7 +159,7 @@ public struct CircleProgressView: View {
                 //                .foregroundColor(enableLighterTailColor ? barColor.lighter(by: 0.2) : barColor)
                     .foregroundStyle(.red)
                     .shadow(color: .black, radius: 10, x: 0, y: 0)
-                //.rotationEffect(.degrees(-90.0))
+                .rotationEffect(.degrees(-90.0))
                     .clipShape(
                         Circle().stroke(lineWidth: 30)
                     )
@@ -176,7 +176,7 @@ public struct CircleProgressView: View {
                     lineCap: .round,
                     lineJoin: .round))
                 .foregroundStyle(barStyle)
-                //.rotationEffect(.degrees(rotationDegrees))
+                .rotationEffect(.degrees(-90))
             
             if !is075Lap {
                 Circle()
@@ -185,7 +185,7 @@ public struct CircleProgressView: View {
                 //                .foregroundColor(enableLighterTailColor ? barColor.lighter(by: 0.2) : barColor)
                     .foregroundStyle(tailStyle)
                     .shadow(color: .black, radius: 10, x: 0, y: 0)
-                //.rotationEffect(.degrees(-90.0))
+                .rotationEffect(.degrees(-90.0))
                     .clipShape(
                         Circle().stroke(lineWidth: 30)
                     )
