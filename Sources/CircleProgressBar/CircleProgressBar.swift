@@ -13,6 +13,7 @@ public struct CircleProgressView: View {
     let progressStyle: ProgressStyle
     let enableGlow: Bool
     let enableLighterTailColor: Bool
+    let filledAcrPart: Double = 0.9
     
     private var barStyle: AnyShapeStyle {
         switch progressStyle {
@@ -55,16 +56,20 @@ public struct CircleProgressView: View {
         return progress <= 1.0
     }
     
+    
+    
     private var is075Lap: Bool {
-        return progress <= 0.75
+        return progress <= filledAcrPart
     }
+    
+    
     
     private var isHalfLap: Bool {
         return progress <= 0.5
     }
     
     private var rotationDegrees: Double {
-        return is075Lap ? 0.0 : (normalizedProgress - 0.75)*360.0
+        return is075Lap ? 0.0 : (normalizedProgress - filledAcrPart)*360.0
     }
     
 //    private var barColor: Color {
@@ -146,7 +151,7 @@ public struct CircleProgressView: View {
             
             Circle()
                 
-                .trim(from: 0.0, to: is075Lap ? normalizedProgress : 0.75)
+                .trim(from: 0.0, to: is075Lap ? normalizedProgress : filledAcrPart)
                 //.trim(from: 0.0, to: normalizedProgress)
                 
                 .stroke(style: StrokeStyle(
