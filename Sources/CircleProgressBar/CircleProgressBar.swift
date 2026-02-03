@@ -115,10 +115,10 @@ public struct CircleProgressView: View {
     public var body: some View {
         ZStack {
             
-            VStack{
-                Text("\(progress)")
-                Text("\(rotationDegrees)")
-            }
+//            VStack{
+//                Text("\(progress)")
+//                Text("\(rotationDegrees)")
+//            }
 //            if enableGlow {
 //                Circle()
 //                    .trim(from: 0.0, to: 1.0)
