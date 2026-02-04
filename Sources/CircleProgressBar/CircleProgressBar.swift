@@ -191,18 +191,31 @@ public struct CircleProgressView: View {
                         .stroke(lineWidth: 30)
                 )
                 
-                Circle()
+            Circle()
 //                .trim(from: (progress > 1.0 && normalizedProgress <= 0.25 ? normalizedProgress + 1.0 : normalizedProgress) - 0.25, to: normalizedProgress)
-                .trim(from: normalizedProgress - 0.25, to: normalizedProgress)
-                    .stroke(style: StrokeStyle(lineWidth: 30, lineCap: .round, lineJoin: .round))
-                    .foregroundStyle(barStyle)
-                .rotationEffect(.degrees(-90.0))
-                .clipShape(
-                    Circle()
-                        .stroke(lineWidth: 30)
-                )
-                .padding(40)
+            .trim(from: normalizedProgress + 0.95 - 0.2, to: normalizedProgress + 0.98)
+                .stroke(style: StrokeStyle(lineWidth: 30, lineCap: .round, lineJoin: .round))
+                .foregroundStyle(barStyle)
+            .rotationEffect(.degrees(-90.0))
+            .clipShape(
+                Circle()
+                    .stroke(lineWidth: 30)
+            )
+            //.padding(40)
              
+            
+            
+            Circle()
+//                .trim(from: (progress > 1.0 && normalizedProgress <= 0.25 ? normalizedProgress + 1.0 : normalizedProgress) - 0.25, to: normalizedProgress)
+            .trim(from: normalizedProgress - 0.2, to: normalizedProgress)
+                .stroke(style: StrokeStyle(lineWidth: 30, lineCap: .round, lineJoin: .round))
+                .foregroundStyle(barStyle)
+            .rotationEffect(.degrees(-90.0))
+            .clipShape(
+                Circle()
+                    .stroke(lineWidth: 30)
+            )
+            //.padding(80)
             //}
             
             
