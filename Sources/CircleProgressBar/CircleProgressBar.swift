@@ -115,10 +115,11 @@ public struct CircleProgressView: View {
     public var body: some View {
         ZStack {
             
-//            VStack{
-//                Text("\(progress)")
-//                Text("\(rotationDegrees)")
-//            }
+            VStack{
+                Text("\(progress)")
+                Text("\(normalizedProgress)")
+                Text("\(rotationDegrees)")
+            }
 //            if enableGlow {
 //                Circle()
 //                    .trim(from: 0.0, to: 1.0)
@@ -178,18 +179,29 @@ public struct CircleProgressView: View {
                 .foregroundStyle(barStyle)
                 .rotationEffect(.degrees(-90))
             
-            if !is075Lap {
+            //if !is075Lap {
                 Circle()
-                    .trim(from: CGFloat(abs((min(normalizedProgress, 1.0))-0.001)), to: CGFloat(abs((min(normalizedProgress, 1.0))-0.0005)))
+                    .trim(from: normalizedProgress - 0.02, to: normalizedProgress)
                     .stroke(style: StrokeStyle(lineWidth: 30, lineCap: .round, lineJoin: .round))
-                //                .foregroundColor(enableLighterTailColor ? barColor.lighter(by: 0.2) : barColor)
                     .foregroundStyle(tailStyle)
                     .shadow(color: .black, radius: 10, x: 0, y: 0)
                 .rotationEffect(.degrees(-90.0))
-                    .clipShape(
-                        Circle().stroke(lineWidth: 30)
-                    )
-            }
+                .clipShape(
+                    Circle()
+                        .stroke(lineWidth: 30)
+                )
+                
+                Circle()
+                    .trim(from: normalizedProgress - 0.2, to: normalizedProgress - 0.02)
+                    .stroke(style: StrokeStyle(lineWidth: 30, lineCap: .round, lineJoin: .round))
+                    .foregroundStyle(barStyle)
+                .rotationEffect(.degrees(-90.0))
+                .clipShape(
+                    Circle()
+                        .stroke(lineWidth: 30)
+                )
+             
+            //}
             
             
 //            Circle()

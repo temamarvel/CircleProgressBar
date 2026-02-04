@@ -29,7 +29,6 @@ extension Color {
     static let surfSand    = Color(hex: "#F4D27A")
     static let surfPalm    = Color(hex: "#6DAA6E")
     static let surfPacific = Color(hex: "#1C9CA6")
-    static let surfBlack = Color(hex: "#000000")
     
     // сам градиент (массив цветов)
     static let surfProgressGradient: [Color] = [
@@ -38,7 +37,7 @@ extension Color {
         .surfSand,
         .surfPalm,
         .surfPacific,
-        .surfBlack
+        .pink
     ]
     
     func lighter(by amount: CGFloat = 0.2) -> Color {
