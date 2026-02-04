@@ -192,7 +192,8 @@ public struct CircleProgressView: View {
                 )
                 
                 Circle()
-                    .trim(from: normalizedProgress - 0.2, to: normalizedProgress - 0.02)
+//                .trim(from: (progress > 1.0 && normalizedProgress <= 0.25 ? normalizedProgress + 1.0 : normalizedProgress) - 0.25, to: normalizedProgress)
+                .trim(from: normalizedProgress - 0.25, to: normalizedProgress)
                     .stroke(style: StrokeStyle(lineWidth: 30, lineCap: .round, lineJoin: .round))
                     .foregroundStyle(barStyle)
                 .rotationEffect(.degrees(-90.0))
@@ -200,6 +201,7 @@ public struct CircleProgressView: View {
                     Circle()
                         .stroke(lineWidth: 30)
                 )
+                .padding(40)
              
             //}
             
@@ -220,7 +222,7 @@ public struct CircleProgressView: View {
 }
 
 struct CircleProgressViewPreviewContainer: View {
-    @State private var progress: Double = 1.5
+    @State private var progress: Double = 1.01
     @State private var padding: Double = 30.0
     @State private var showGlow: Bool = false
     @State private var lighterTailColor: Bool = true
